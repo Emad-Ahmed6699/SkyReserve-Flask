@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SkyReserve | New Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-surface text-text-primary h-screen overflow-hidden">
+    <main class="flex h-full w-full">
+        <!-- Visual Side -->
+        <section class="hidden lg:flex lg:w-3/5 relative overflow-hidden group">
+            <!-- Fixed Image with Dark Overlay for Text Clarity -->
+            <img alt="Private Jet Lounge" class="absolute inset-0 w-full h-full object-cover transition-all duration-[2000ms] scale-105 group-hover:scale-100" 
+                 src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=2000&auto=format&fit=crop"/>
+            
+            <!-- Dark Overlay for Readability -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 z-10"></div>
+            
+            <!-- Back to Home Button (Visible on Dark Overlay) -->
+            <a href="/" class="absolute top-8 left-8 z-50 flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20 text-white text-sm transition-all">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Return to Home</span>
+            </a>
+
+            <div class="relative z-20 mt-auto p-20 space-y-6 max-w-2xl text-white">
+                <div class="flex items-center gap-4 text-primary">
+                    <i data-lucide="shield-check" class="w-12 h-12"></i>
+                    <h1 class="text-4xl font-display font-bold tracking-tighter">SkyReserve</h1>
+                </div>
+                <h2 class="text-5xl font-display leading-[1.1] tracking-tight">Join the world's <br/><span class="text-primary italic">most elite</span> fleet.</h2>
+                <p class="text-xl text-white/70 font-light">Experience the pinnacle of private aviation management with our global network.</p>
+            </div>
+        </section>
+
+        <!-- Form Side -->
+        <section class="w-full lg:w-2/5 h-full bg-surface-container flex flex-col justify-center px-12 md:px-24 py-12 relative border-l border-outline-variant/10 overflow-y-auto">
+            <div class="w-full max-w-md mx-auto space-y-10 py-12">
+                <div class="space-y-4 text-center lg:text-left">
+                    <h3 class="text-3xl font-display tracking-tight">Create <span class="text-primary italic">Account.</span></h3>
+                    <p class="text-text-secondary text-sm">Fill in your details to begin your journey with SkyReserve.</p>
+                </div>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="glass p-4 rounded-xl text-xs text-red-400 border border-red-500/20 flex items-center gap-3">
+                                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form action="/register" method="POST" class="space-y-5">
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1" for="name">Full Name</label>
+                        <div class="relative group">
+                            <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40 group-focus-within:opacity-100 group-focus-within:text-primary transition-all"></i>
+                            <input class="input-premium pl-12" id="name" name="name" placeholder="John Doe" type="text" required/>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1" for="email">Email Address</label>
+                        <div class="relative group">
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40 group-focus-within:opacity-100 group-focus-within:text-primary transition-all"></i>
+                            <input class="input-premium pl-12" id="email" name="email" placeholder="john@example.com" type="email" required/>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1" for="password">Password</label>
+                        <div class="relative group">
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40 group-focus-within:opacity-100 group-focus-within:text-primary transition-all"></i>
+                            <input class="input-premium pl-12" id="password" name="password" placeholder="••••••••••••" type="password" required/>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full btn-premium btn-primary py-4 justify-center text-sm shadow-2xl shadow-primary/20 mt-4" type="submit">
+                        Register Account
+                    </button>
+                </form>
+
+                <footer class="text-center pt-8 border-t border-outline-variant/10">
+                    <p class="text-xs text-text-secondary">
+                        Already have an account? 
+                        <a class="text-primary font-bold hover:underline ml-2" href="/login">Sign In</a>
+                    </p>
+                </footer>
+            </div>
+        </section>
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

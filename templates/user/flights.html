@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Fleet Schedule | SkyReserve{% endblock %}
+
+{% block content %}
+<div class="space-y-16 py-12">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row md:items-end justify-between gap-6" data-aos="fade-up">
+        <div class="space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-widest">
+                <i data-lucide="calendar" class="w-3 h-3"></i>
+                Live Schedule
+            </div>
+            <h1 class="text-4xl md:text-5xl font-display tracking-tight">Available <span class="text-primary italic">Fleet.</span></h1>
+            <p class="text-text-secondary max-w-xl">Browse our global fleet of ultra-long-range private aircraft and schedule your next departure.</p>
+        </div>
+        
+        <div class="flex gap-4">
+            <div class="glass px-4 py-2 rounded-lg flex items-center gap-3 border-outline-variant/10">
+                <i data-lucide="filter" class="w-4 h-4 opacity-40"></i>
+                <span class="text-xs font-semibold opacity-60">Sort by: Departure</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Flight Grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        {% for flight in flights %}
+        <div class="group relative" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+            <!-- Background Glow on Hover -->
+            <div class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-transparent rounded-[24px] blur opacity-0 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+            
+            <div class="relative card-premium flex flex-col md:flex-row gap-8 bg-surface border-outline-variant/10 p-0 overflow-hidden">
+                <!-- Visual/Image Side -->
+                <div class="w-full md:w-48 h-48 md:h-auto relative overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?q=80&w=2070&auto=format&fit=crop" 
+                         class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" 
+                         alt="Jet Visual">
+                    <div class="absolute inset-0 bg-gradient-to-r from-surface via-transparent to-transparent md:block hidden"></div>
+                    <div class="absolute top-4 left-4 glass px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest text-primary">
+                        {{ flight.flight_number }}
+                    </div>
+                </div>
+
+                <!-- Info Side -->
+                <div class="flex-1 p-8 flex flex-col justify-between">
+                    <div class="space-y-8">
+                        <div class="flex items-center justify-between gap-6">
+                            <div class="space-y-1">
+                                <h3 class="text-2xl font-display uppercase tracking-tight">{{ flight.origin }}</h3>
+                                <p class="text-[10px] text-dim uppercase tracking-widest">Departure {{ flight.departure_time.strftime('%H:%M') }}</p>
+                            </div>
+                            
+                            <div class="flex-1 border-t border-dashed border-outline-variant/30 relative flex justify-center">
+                                <i data-lucide="plane" class="w-4 h-4 absolute -top-2 text-primary rotate-90"></i>
+                            </div>
+
+                            <div class="space-y-1 text-right">
+                                <h3 class="text-2xl font-display uppercase tracking-tight">{{ flight.destination }}</h3>
+                                <p class="text-[10px] text-dim uppercase tracking-widest">Arrival {{ flight.arrival_time.strftime('%H:%M') }}</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 py-4 border-y border-outline-variant/10">
+                            <div>
+                                <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Price</span>
+                                <span class="text-lg font-display text-primary">${{ "{:,.0f}".format(flight.price) }}</span>
+                            </div>
+                            <div>
+                                <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Seats</span>
+                                <span class="text-sm font-semibold">{{ flight.seats_available }} Available</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Date</span>
+                                <span class="text-sm font-semibold">{{ flight.departure_time.strftime('%b %d') }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex gap-4">
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.role != 'admin' %}
+                                <form action="/book/{{ flight.id }}" method="POST" class="flex-1">
+                                    <button type="submit" class="w-full btn-premium btn-primary justify-center" {% if flight.seats_available <= 0 %}disabled{% endif %}>
+                                        {% if flight.seats_available > 0 %}Confirm Booking{% else %}Fully Reserved{% endif %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="/admin" class="flex-1 btn-premium btn-outline justify-center">Manage Route</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="/login" class="flex-1 btn-premium btn-primary justify-center">Sign In to Book</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full py-32 text-center space-y-6" data-aos="fade-up">
+            <div class="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center mx-auto opacity-20">
+                <i data-lucide="cloud-off" class="w-10 h-10"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-display">No flights scheduled.</h3>
+                <p class="text-dim">Our fleet is currently reaching its destinations. Check back shortly.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

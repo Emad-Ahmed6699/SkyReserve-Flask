@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SkyReserve | Premium Aviation{% endblock %}</title>
+    
+    <!-- Core Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Tailwind for rapid utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--primary)',
+                        surface: 'var(--bg-surface)',
+                        'surface-container': 'var(--bg-base)',
+                        'surface-high': 'var(--bg-surface-high)',
+                        'text-primary': 'var(--text-primary)',
+                        'text-secondary': 'var(--text-secondary)',
+                        'dim': 'var(--text-dim)',
+                        'outline-variant': 'var(--border)'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Global Navigation -->
+    <nav class="navbar glass px-[5%]">
+        <a href="/" class="flex items-center gap-2 no-underline text-primary">
+            <i data-lucide="plane-takeoff" class="w-8 h-8"></i>
+            <span class="font-display text-xl tracking-tighter">SkyReserve</span>
+        </a>
+        
+        <div class="hidden md:flex items-center gap-10">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/flights" class="nav-link">Fleet Schedule</a>
+            {% if current_user.is_authenticated %}
+                {% if current_user.role == 'admin' %}
+                    <a href="/admin" class="nav-link">Admin Panel</a>
+                {% else %}
+                    <a href="/my-bookings" class="nav-link">My Bookings</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="flex items-center gap-6">
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+            </button>
+
+            {% if current_user.is_authenticated %}
+                <div class="flex items-center gap-4">
+                    <span class="text-[10px] font-bold text-dim uppercase tracking-widest hidden sm:block">{{ current_user.name }}</span>
+                    <a href="/logout" class="btn-premium btn-outline py-2 px-4 text-xs">Sign Out</a>
+                </div>
+            {% else %}
+                <div class="flex items-center gap-4">
+                    <a href="/login" class="text-sm font-semibold hover:text-primary transition-all">Sign In</a>
+                    <a href="/register" class="btn-premium btn-primary py-2 px-6">Register</a>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Viewport -->
+    <main id="main-content" class="pt-24 min-h-screen">
+        <div class="max-w-[1440px] mx-auto px-[5%]">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="fixed top-24 right-8 z-[2000] space-y-3">
+                        {% for category, message in messages %}
+                            <div class="flex items-center gap-3 p-4 glass rounded-lg border-l-4 {% if category == 'error' %}border-red-500 text-red-400{% else %}border-primary text-primary{% endif %} shadow-2xl animate-fade-in">
+                                <i data-lucide="{% if category == 'error' %}alert-circle{% else %}check-circle{% endif %}" class="w-5 h-5"></i>
+                                <span class="text-sm font-semibold">{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Premium Footer -->
+    <footer class="mt-32 pt-24 pb-12 border-t border-outline-variant/10 bg-surface-container/30 backdrop-blur-xl relative overflow-hidden">
+        <!-- Background Decorative Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        
+        <div class="max-w-[1440px] mx-auto px-[5%]">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+                <!-- Brand Section -->
+                <div class="md:col-span-4 space-y-8">
+                    <div class="flex items-center gap-3 text-primary group cursor-pointer">
+                        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="plane-takeoff" class="w-6 h-6"></i>
+                        </div>
+                        <span class="font-display text-2xl tracking-tighter">SkyReserve</span>
+                    </div>
+                    <p class="text-sm text-dim leading-relaxed max-w-xs">
+                        Precision-engineered aviation management for the modern global elite. Experience the pinnacle of private travel.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-xl glass border border-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 group">
+                            <i data-lucide="instagram" class="w-4 h-4 opacity-60 group-hover:opacity-100"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-xl glass border border-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 group">
+                            <i data-lucide="twitter" class="w-4 h-4 opacity-60 group-hover:opacity-100"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-xl glass border border-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 group">
+                            <i data-lucide="linkedin" class="w-4 h-4 opacity-60 group-hover:opacity-100"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links Grid -->
+                <div class="md:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-12">
+                    <div class="space-y-6">
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/80">Operations</h4>
+                        <ul class="space-y-4 text-sm text-dim">
+                            <li><a href="/flights" class="hover:text-primary transition-all">Fleet Schedule</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Route Network</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Empty Leg Flights</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Ground Support</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-6">
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/80">Experience</h4>
+                        <ul class="space-y-4 text-sm text-dim">
+                            <li><a href="#" class="hover:text-primary transition-all">Cabin Gallery</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Bespoke Catering</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Concierge Desk</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Guest Protocol</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-6">
+                        <h4 class="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/80">Legal Terminal</h4>
+                        <ul class="space-y-4 text-sm text-dim">
+                            <li><a href="#" class="hover:text-primary transition-all">Privacy Shield</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Flight Terms</a></li>
+                            <li><a href="#" class="hover:text-primary transition-all">Safety Directives</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-12 border-t border-outline-variant/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-[10px] uppercase tracking-[0.3em] opacity-40 text-text-primary">
+                    © 2026 SkyReserve Systems. Elite Flight Management.
+                </div>
+                <div class="flex items-center gap-8 opacity-40 text-[10px] uppercase tracking-[0.2em] font-bold">
+                    <a href="#" class="hover:opacity-100 transition-opacity">Status: Nominal</a>
+                    <a href="#" class="hover:opacity-100 transition-opacity">Server: Global-01</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Dependencies -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Initialize Scroll Reveals
+        AOS.init({
+            duration: 1000,
+            easing: 'cubic-bezier(0.23, 1, 0.32, 1)',
+            once: true
+        });
+
+        // Initialize Smooth Scroll
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Theme Management
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'light') html.classList.remove('dark');
+        else html.classList.add('dark');
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            if (newTheme === 'dark') html.classList.add('dark');
+            else html.classList.remove('dark');
+            
+            // Subtle transition animation
+            gsap.fromTo('body', {opacity: 0.8}, {opacity: 1, duration: 0.4});
+        });
+
+        // Auto-hide alerts
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.animate-fade-in');
+            alerts.forEach(alert => {
+                gsap.to(alert, {
+                    opacity: 0, 
+                    x: 50, 
+                    duration: 0.5, 
+                    onComplete: () => alert.remove()
+                });
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

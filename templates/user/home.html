@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden rounded-[2rem] mt-4 mb-20 group">
+    <!-- Hero Background with Improved Overlay -->
+    <div class="absolute inset-0 overflow-hidden">
+        <img alt="Elite Private Jet" 
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" 
+             src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=2000&auto=format&fit=crop"/>
+        
+        <!-- Stronger Dynamic Overlay: Darker overall to ensure white text readability -->
+        <div class="absolute inset-0 bg-black/50 dark:bg-black/30 z-10"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent z-20"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-30 text-center max-w-4xl px-6 space-y-10" data-aos="fade-up">
+        <div class="flex items-center justify-center gap-3 mb-4">
+            <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+            <span class="text-[10px] uppercase tracking-[0.4em] font-bold text-white/90">Direct Fleet Access Now Live</span>
+        </div>
+        
+        <h1 class="text-7xl md:text-9xl font-display font-bold tracking-tighter leading-[0.8] text-white drop-shadow-2xl">
+            Beyond the <br/>
+            <span class="text-primary italic">Horizon.</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl text-white/80 font-light max-w-2xl mx-auto leading-relaxed">
+            Experience private aviation as it was meant to be—silent, spacious, and meticulously tailored to your timeline.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+            <a href="/flights" class="btn-premium btn-primary py-4 px-10 text-sm shadow-2xl shadow-primary/30 w-full sm:w-auto">
+                Explore Flights
+            </a>
+            <a href="/register" class="btn-premium btn-outline py-4 px-10 text-sm border-white/20 text-white hover:bg-white hover:text-black w-full sm:w-auto backdrop-blur-md">
+                Register
+            </a>
+        </div>
+    </div>
+
+    <!-- Floating Decorative Elements -->
+    <div class="absolute bottom-12 left-12 z-30 hidden lg:block" data-aos="fade-right">
+        <div class="flex items-center gap-4 glass p-4 rounded-2xl border-white/10">
+            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                <i data-lucide="map-pin" class="w-5 h-5"></i>
+            </div>
+            <div class="pr-6">
+                <p class="text-[10px] uppercase tracking-widest opacity-40 font-bold text-white">Current Hub</p>
+                <p class="text-sm font-semibold text-white">London • LHR</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats / Features -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32" data-aos="fade-up">
+    <div class="glass p-10 rounded-[2rem] border-outline-variant/10 group hover:border-primary/30 transition-all duration-500">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform">
+            <i data-lucide="clock" class="w-7 h-7"></i>
+        </div>
+        <h3 class="text-2xl font-display mb-4">Zero Wait.</h3>
+        <p class="text-text-secondary leading-relaxed">Skip the terminal congestion. Your aircraft is ready when you are.</p>
+    </div>
+    
+    <div class="glass p-10 rounded-[2rem] border-outline-variant/10 group hover:border-primary/30 transition-all duration-500">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform">
+            <i data-lucide="globe" class="w-7 h-7"></i>
+        </div>
+        <h3 class="text-2xl font-display mb-4">Global Reach.</h3>
+        <p class="text-text-secondary leading-relaxed">Direct access to over 5,000 airports worldwide with unmatched precision.</p>
+    </div>
+    
+    <div class="glass p-10 rounded-[2rem] border-outline-variant/10 group hover:border-primary/30 transition-all duration-500">
+        <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-8 group-hover:scale-110 transition-transform">
+            <i data-lucide="shield" class="w-7 h-7"></i>
+        </div>
+        <h3 class="text-2xl font-display mb-4">Ultimate Privacy.</h3>
+        <p class="text-text-secondary leading-relaxed">End-to-end security and complete discretion for every route.</p>
+    </div>
+</div>
+{% endblock %}
