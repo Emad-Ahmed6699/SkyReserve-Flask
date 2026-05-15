@@ -96,7 +96,7 @@
                                     <div class="flex gap-3">
                                         <a href="/edit-flight/{{ flight.id }}" class="flex-1 btn-premium btn-outline py-3 justify-center text-xs">Modify Route</a>
                                         <form action="/delete-flight/{{ flight.id }}" method="POST" data-confirm="Permanently decommission this flight route?">
-                                            <button type="submit" class="w-12 h-12 flex items-center justify-center rounded-xl border border-red-500/20 text-red-500 hover:bg-red-500/10 transition-all" title="Delete Flight">
+                                            <button type="submit" class="btn-action-danger" title="Delete Flight">
                                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                                             </button>
                                         </form>

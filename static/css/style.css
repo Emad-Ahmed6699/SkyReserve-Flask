@@ -228,6 +228,55 @@ h1, h2, h3, h4, .font-display {
     transition: var(--transition);
 }
 
+/* --- Action Buttons (Table/List) --- */
+.btn-action {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-surface-high);
+    color: var(--text-secondary);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn-action:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-glow);
+    transform: translateY(-2px);
+}
+
+.btn-action-danger {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    background: rgba(239, 68, 68, 0.05);
+    color: #ef4444;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn-action-danger:hover {
+    border-color: #ef4444;
+    background: #ef4444;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+[data-theme="light"] .btn-action {
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
 /* --- Back Button --- */
 .back-link {
     display: inline-flex;
