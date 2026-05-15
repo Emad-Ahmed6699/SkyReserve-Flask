@@ -1,156 +1,194 @@
 {% extends "base.html" %}
 
-{% block title %}Operations Terminal | SkyReserve{% endblock %}
+{% block title %}Operations Dashboard | SkyReserve{% endblock %}
 
 {% block content %}
 <div class="space-y-16 py-12">
     <!-- Header -->
-    <header class="flex flex-col md:flex-row md:items-end justify-between gap-6" data-aos="fade-up">
-        <div class="space-y-4">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-widest">
-                <i data-lucide="command" class="w-3 h-3"></i>
-                Operations Center
+    <header class="flex flex-col md:flex-row md:items-end justify-between gap-8" data-aos="fade-up">
+        <div class="space-y-6">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-[0.3em]">
+                <i data-lucide="shield-check" class="w-3 h-3"></i>
+                Authorized Command Interface
             </div>
-            <h1 class="text-4xl md:text-5xl font-display tracking-tight">Fleet <span class="text-primary italic">Terminal.</span></h1>
-            <p class="text-text-secondary">Mission control for fleet scheduling and reservation management.</p>
+            <h1 class="text-5xl md:text-7xl font-display tracking-tight leading-none">Operations <span class="text-primary italic">Control.</span></h1>
+            <p class="text-text-secondary max-w-xl text-lg font-light">Monitor active flight manifests, manage pending booking requests, and synchronize global fleet movements.</p>
         </div>
         
-        <a href="/add-flight" class="btn-premium btn-primary px-8">
-            <i data-lucide="plus" class="w-4 h-4"></i>
-            Initialize Route
-        </a>
+        <div class="flex items-center gap-4">
+            <a href="/add-flight" class="btn-premium btn-primary px-8 py-4 text-sm shadow-xl shadow-primary/20">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Dispatch New Flight
+            </a>
+        </div>
     </header>
 
-    <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-aos="fade-up">
-        <div class="card-premium bg-surface/50 p-8 border-outline-variant/10">
-            <div class="flex justify-between items-start mb-6">
-                <div class="p-3 bg-primary/10 text-primary rounded-xl">
-                    <i data-lucide="plane" class="w-6 h-6"></i>
-                </div>
-                <span class="text-[10px] font-bold text-green-400">+12%</span>
-            </div>
-            <h4 class="text-3xl font-display">{{ flights|length }}</h4>
-            <p class="text-[10px] uppercase tracking-widest text-dim mt-2">Active Sorties</p>
-        </div>
-        <div class="card-premium bg-surface/50 p-8 border-outline-variant/10">
-            <div class="flex justify-between items-start mb-6">
-                <div class="p-3 bg-yellow-500/10 text-yellow-500 rounded-xl">
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-aos="fade-up" data-aos-delay="100">
+        <div class="card-premium p-8 bg-surface-container/30 border border-outline-variant/10">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                     <i data-lucide="clock" class="w-6 h-6"></i>
                 </div>
-                <span class="text-[10px] font-bold text-yellow-500">Action Required</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-primary">Pending</span>
             </div>
-            <h4 class="text-3xl font-display">{{ pending_bookings|length }}</h4>
-            <p class="text-[10px] uppercase tracking-widest text-dim mt-2">Pending Clearances</p>
+            <h3 class="text-4xl font-display">{{ pending_bookings|length }}</h3>
+            <p class="text-text-secondary text-xs uppercase tracking-widest mt-2">Manifest Requests</p>
         </div>
-        <div class="card-premium bg-surface/50 p-8 border-outline-variant/10">
-            <div class="flex justify-between items-start mb-6">
-                <div class="p-3 bg-green-500/10 text-green-500 rounded-xl">
-                    <i data-lucide="users" class="w-6 h-6"></i>
+        
+        <div class="card-premium p-8 bg-surface-container/30 border border-outline-variant/10">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500">
+                    <i data-lucide="plane" class="w-6 h-6"></i>
                 </div>
-                <span class="text-[10px] font-bold text-green-400">98% Satisfied</span>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-blue-500">Operational</span>
             </div>
-            <h4 class="text-3xl font-display">1.4k</h4>
-            <p class="text-[10px] uppercase tracking-widest text-dim mt-2">Elite Passengers</p>
+            <h3 class="text-4xl font-display">{{ flights|length }}</h3>
+            <p class="text-text-secondary text-xs uppercase tracking-widest mt-2">Active Flight Routes</p>
+        </div>
+
+        <div class="card-premium p-8 bg-surface-container/30 border border-outline-variant/10">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-500">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </div>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-green-500">Efficiency</span>
+            </div>
+            <h3 class="text-4xl font-display">94%</h3>
+            <p class="text-text-secondary text-xs uppercase tracking-widest mt-2">Fleet Utilization</p>
         </div>
     </div>
 
-    <!-- Bookings Management -->
-    <section class="space-y-8" data-aos="fade-up">
-        <div class="flex items-center gap-4">
-            <div class="h-8 w-1 bg-primary rounded-full"></div>
-            <h2 class="text-2xl font-display tracking-tight">Pending Authorizations</h2>
-        </div>
-        
-        <div class="space-y-4">
-            {% for booking in pending_bookings %}
-            <div class="card-premium border-outline-variant/10 bg-surface/50 p-6 flex flex-col md:flex-row items-center gap-8">
-                <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <div>
-                        <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Passenger</span>
-                        <p class="font-bold text-sm">{{ booking.user.name }}</p>
-                    </div>
-                    <div>
-                        <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Flight No.</span>
-                        <p class="font-bold text-sm text-primary">{{ booking.flight.flight_number }}</p>
-                    </div>
-                    <div>
-                        <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Route</span>
-                        <p class="text-sm font-semibold">{{ booking.flight.origin }} → {{ booking.flight.destination }}</p>
-                    </div>
-                    <div>
-                        <span class="block text-[8px] uppercase tracking-widest opacity-40 mb-1">Requested On</span>
-                        <p class="text-sm opacity-60">{{ booking.booking_date.strftime('%b %d, %H:%M') }}</p>
-                    </div>
-                </div>
-                <div class="flex gap-2">
-                    <form action="/admin/booking/{{ booking.id }}/accept" method="POST">
-                        <button class="px-6 py-2 bg-green-500/10 text-green-400 border border-green-500/20 rounded-lg hover:bg-green-500/20 transition-all text-[10px] font-bold uppercase tracking-widest">Authorize</button>
-                    </form>
-                    <form action="/admin/booking/{{ booking.id }}/reject" method="POST">
-                        <button class="px-6 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all text-[10px] font-bold uppercase tracking-widest">Deny</button>
-                    </form>
+    <!-- Tables -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Pending Bookings -->
+        <div class="lg:col-span-12 space-y-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="flex items-center justify-between">
+                <h2 class="text-3xl font-display uppercase tracking-tight">Manifest <span class="text-primary italic">Requests.</span></h2>
+                <span class="text-[10px] font-bold uppercase tracking-widest opacity-40">Approval Queue</span>
+            </div>
+
+            <div class="card-premium overflow-hidden bg-surface-container/20 border border-outline-variant/10">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-outline-variant/10 bg-white/5">
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">User Profile</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Flight Manifest</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Timestamp</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 text-right">Operational Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/10">
+                            {% for booking in pending_bookings %}
+                            <tr class="group hover:bg-white/[0.02] transition-colors">
+                                <td class="px-8 py-6">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                                            {{ booking.user.name[0] }}
+                                        </div>
+                                        <div>
+                                            <p class="font-bold">{{ booking.user.name }}</p>
+                                            <p class="text-[10px] opacity-40 uppercase tracking-widest">{{ booking.user.email }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="space-y-1">
+                                        <p class="text-sm font-bold">{{ booking.flight.origin }} <span class="text-primary">→</span> {{ booking.flight.destination }}</p>
+                                        <p class="text-[10px] opacity-40 font-bold uppercase tracking-widest">{{ booking.flight.flight_number }}</p>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <p class="text-sm opacity-60">{{ booking.booking_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                                </td>
+                                <td class="px-8 py-6 text-right">
+                                    <div class="flex items-center justify-end gap-3">
+                                        <form action="/admin/booking/{{ booking.id }}/accept" method="POST" onsubmit="return confirm('Authorize manifest access for {{ booking.user.name }}?')">
+                                            <button type="submit" class="btn-premium py-2 px-5 bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-black text-[10px] border-green-500/20" title="Accept Booking">
+                                                Authorize
+                                            </button>
+                                        </form>
+                                        <form action="/admin/booking/{{ booking.id }}/reject" method="POST" onsubmit="return confirm('Deny manifest access for {{ booking.user.name }}?')">
+                                            <button type="submit" class="btn-premium py-2 px-5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white text-[10px] border-red-500/20" title="Reject Booking">
+                                                Decline
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="px-8 py-20 text-center opacity-30">
+                                    <div class="space-y-4">
+                                        <i data-lucide="inbox" class="w-10 h-10 mx-auto"></i>
+                                        <p class="text-xs uppercase tracking-[0.2em] font-bold">Manifest Queue is Empty</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            {% else %}
-            <div class="py-16 text-center glass rounded-2xl border-outline-variant/10 opacity-30 italic">
-                <p>No active clearance requests.</p>
+        </div>
+
+        <!-- Flights Management -->
+        <div class="lg:col-span-12 space-y-8" data-aos="fade-up" data-aos-delay="300">
+            <div class="flex items-center justify-between">
+                <h2 class="text-3xl font-display uppercase tracking-tight">Fleet <span class="text-primary italic">Inventory.</span></h2>
+                <span class="text-[10px] font-bold uppercase tracking-widest opacity-40">Active Routes</span>
             </div>
-            {% endfor %}
-        </div>
-    </section>
 
-    <!-- Flight Management -->
-    <section class="space-y-8" data-aos="fade-up">
-        <div class="flex items-center gap-4">
-            <div class="h-8 w-1 bg-primary rounded-full"></div>
-            <h2 class="text-2xl font-display tracking-tight">Fleet Schedule</h2>
+            <div class="card-premium overflow-hidden bg-surface-container/20 border border-outline-variant/10">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-outline-variant/10 bg-white/5">
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Flight Number</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Origin / Destination</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Departure / Arrival</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Payload</th>
+                                <th class="px-8 py-6 text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 text-right">Operational Logic</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-outline-variant/10">
+                            {% for flight in flights %}
+                            <tr class="group hover:bg-white/[0.02] transition-colors">
+                                <td class="px-8 py-6 font-display text-lg uppercase">{{ flight.flight_number }}</td>
+                                <td class="px-8 py-6">
+                                    <p class="font-bold">{{ flight.origin }} <span class="text-primary">→</span> {{ flight.destination }}</p>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <div class="space-y-1">
+                                        <p class="text-xs font-bold">{{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                                        <p class="text-xs opacity-40">{{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6">
+                                    <span class="text-xs font-bold px-3 py-1 bg-white/5 rounded-full border border-white/10">
+                                        {{ flight.seats_available }} Seats
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a href="/edit-flight/{{ flight.id }}" class="w-10 h-10 flex items-center justify-center rounded-xl border border-white/10 hover:border-primary/50 text-white/40 hover:text-primary transition-all" title="Edit Flight Details">
+                                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                        </a>
+                                        <form action="/delete-flight/{{ flight.id }}" method="POST" onsubmit="return confirm('Permanently decommission flight route {{ flight.flight_number }}?')">
+                                            <button type="submit" class="w-10 h-10 flex items-center justify-center rounded-xl border border-white/10 hover:border-red-500/50 text-white/40 hover:text-red-500 transition-all" title="Decommission Flight">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Identifier</th>
-                        <th>Origin</th>
-                        <th>Destination</th>
-                        <th>Departure</th>
-                        <th>Load Factor</th>
-                        <th>Pricing</th>
-                        <th class="text-right">Operations</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for flight in flights %}
-                    <tr>
-                        <td class="font-bold text-primary">{{ flight.flight_number }}</td>
-                        <td>{{ flight.origin }}</td>
-                        <td>{{ flight.destination }}</td>
-                        <td class="opacity-60">{{ flight.departure_time.strftime('%b %d, %H:%M') }}</td>
-                        <td>
-                            <div class="flex items-center gap-3">
-                                <div class="w-16 h-1.5 bg-surface-elevated rounded-full overflow-hidden">
-                                    <div class="h-full bg-primary" style="width: {{ (1 - (flight.seats_available/20)) * 100 }}%"></div>
-                                </div>
-                                <span class="text-xs opacity-60">{{ flight.seats_available }} Open</span>
-                            </div>
-                        </td>
-                        <td class="font-bold">${{ "{:,.0f}".format(flight.price) }}</td>
-                        <td class="text-right">
-                            <div class="flex justify-end gap-6">
-                                <a href="/edit-flight/{{ flight.id }}" class="text-primary hover:opacity-60 transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></a>
-                                <form action="/delete-flight/{{ flight.id }}" method="POST" class="inline">
-                                    <button onclick="return confirm('Decommission this aircraft from schedule?')" class="text-red-400 hover:opacity-60 transition-all">
-                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+    </div>
 </div>
 {% endblock %}

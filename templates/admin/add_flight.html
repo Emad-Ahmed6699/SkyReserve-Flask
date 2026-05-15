@@ -1,80 +1,83 @@
 {% extends "base.html" %}
 
-{% block title %}Route Initialization | SkyReserve{% endblock %}
+{% block title %}{% if flight %}Modify Route{% else %}Dispatch New Fleet{% endif %} | SkyReserve{% endblock %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto py-12 space-y-12">
+<div class="max-w-4xl mx-auto py-12">
     <!-- Header -->
-    <header class="space-y-4" data-aos="fade-up">
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold uppercase tracking-widest">
-            <i data-lucide="plus-circle" class="w-3 h-3"></i>
-            Schedule Expansion
-        </div>
-        <h1 class="text-4xl font-display tracking-tight">Initialize <span class="text-primary italic">Route.</span></h1>
-        <p class="text-text-secondary">Configure a new flight path and assign aircraft to the active fleet schedule.</p>
+    <header class="mb-12 space-y-4" data-aos="fade-up">
+        <a href="/admin" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary hover:gap-4 transition-all duration-300">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Admin Command Center
+        </a>
+        <h1 class="text-5xl md:text-7xl font-display tracking-tight leading-none">
+            {% if flight %}Modify <span class="text-primary italic">Route.</span>{% else %}Dispatch <span class="text-primary italic">Fleet.</span>{% endif %}
+        </h1>
+        <p class="text-text-secondary text-lg font-light">Configure precision flight coordinates and fleet availability for global operations.</p>
     </header>
 
     <!-- Form -->
-    <form action="/add-flight" method="POST" class="space-y-12" data-aos="fade-up" data-aos-delay="100">
-        <div class="card-premium bg-surface/50 p-8 border-outline-variant/10 space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Flight Identifier</label>
-                    <input type="text" name="flight_number" class="input-premium" placeholder="SR-711" required>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Assigned Aircraft</label>
-                    <select name="aircraft" class="input-premium appearance-none">
-                        <option value="Gulfstream G650">Gulfstream G650</option>
-                        <option value="Bombardier Global 7500">Bombardier Global 7500</option>
-                        <option value="Cessna Citation Longitude">Cessna Citation Longitude</option>
-                    </select>
-                </div>
-            </div>
+    <div class="card-premium p-8 md:p-12 bg-surface-container/30 border border-outline-variant/10 backdrop-blur-2xl" data-aos="fade-up" data-aos-delay="100">
+        <form method="POST" class="space-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Identification -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label for="flight_number" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Flight Identification</label>
+                        <input type="text" id="flight_number" name="flight_number" class="input-premium" placeholder="e.g. SKY-902" 
+                               value="{{ flight.flight_number if flight else '' }}" required title="Enter Flight Number">
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Departure Vector (Origin)</label>
-                    <input type="text" name="origin" class="input-premium" placeholder="London (LHR)" required>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Arrival Vector (Destination)</label>
-                    <input type="text" name="destination" class="input-premium" placeholder="New York (JFK)" required>
-                </div>
-            </div>
+                    <div class="space-y-2">
+                        <label for="price" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Valuation (USD)</label>
+                        <input type="number" id="price" name="price" step="0.01" class="input-premium" placeholder="25000.00" 
+                               value="{{ flight.price if flight else '' }}" required title="Enter Flight Price">
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Departure Window</label>
-                    <input type="datetime-local" name="departure_time" class="input-premium" required>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Arrival Window</label>
-                    <input type="datetime-local" name="arrival_time" class="input-premium" required>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Payload Valuation (Price)</label>
-                    <div class="relative">
-                        <span class="absolute left-6 top-1/2 -translate-y-1/2 text-primary font-bold">$</span>
-                        <input type="number" name="price" class="input-premium pl-10" placeholder="25000" required>
+                    <div class="space-y-2">
+                        <label for="seats_available" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Payload Capacity (Seats)</label>
+                        <input type="number" id="seats_available" name="seats_available" class="input-premium" placeholder="12" 
+                               value="{{ flight.seats_available if flight else '' }}" required title="Enter Available Seats">
                     </div>
                 </div>
-                <div class="space-y-2">
-                    <label class="text-[10px] uppercase tracking-[0.2em] font-bold opacity-40 ml-1">Available Compartments (Seats)</label>
-                    <input type="number" name="seats_available" class="input-premium" placeholder="12" required>
+
+                <!-- Logistics -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label for="origin" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Departure Vector</label>
+                        <input type="text" id="origin" name="origin" class="input-premium" placeholder="LONDON (LHR)" 
+                               value="{{ flight.origin if flight else '' }}" required title="Enter Departure City">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="destination" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Arrival Vector</label>
+                        <input type="text" id="destination" name="destination" class="input-premium" placeholder="NEW YORK (JFK)" 
+                               value="{{ flight.destination if flight else '' }}" required title="Enter Arrival City">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label for="departure_time" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Dep. Time</label>
+                            <input type="datetime-local" id="departure_time" name="departure_time" class="input-premium text-sm" 
+                                   value="{{ flight.departure_time.strftime('%Y-%m-%dT%H:%M') if flight else '' }}" required title="Select Departure Time">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="arrival_time" class="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80 px-1">Arr. Time</label>
+                            <input type="datetime-local" id="arrival_time" name="arrival_time" class="input-premium text-sm" 
+                                   value="{{ flight.arrival_time.strftime('%Y-%m-%dT%H:%M') if flight else '' }}" required title="Select Arrival Time">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="flex items-center justify-between">
-            <a href="/admin" class="text-xs text-text-secondary hover:text-primary transition-all underline underline-offset-4 decoration-1">Cancel Initialization</a>
-            <button type="submit" class="btn-premium btn-primary px-12 py-4">
-                Deploy Route to Fleet
-            </button>
-        </div>
-    </form>
+            <!-- Submit -->
+            <div class="pt-6 border-t border-outline-variant/10 flex items-center justify-between gap-6">
+                <p class="text-xs text-text-secondary italic max-w-xs">Confirming this dispatch will broadcast the route to all premium members immediately.</p>
+                <button type="submit" class="btn-premium btn-primary py-4 px-12 shadow-2xl shadow-primary/30">
+                    {% if flight %}Update Operational Data{% else %}Authorize Fleet Dispatch{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

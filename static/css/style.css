@@ -71,8 +71,8 @@ h1, h2, h3, h4, .font-display {
 /* --- Layout Components --- */
 .glass {
     background: var(--bg-surface);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border: 1px solid var(--border);
 }
 
