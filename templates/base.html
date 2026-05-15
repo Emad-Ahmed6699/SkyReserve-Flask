@@ -241,6 +241,68 @@
                 });
             });
         }, 5000);
+
+        // Custom Confirmation Modal
+        function showConfirm(message, title = "Authorize Action") {
+            return new Promise((resolve) => {
+                const modal = document.getElementById('custom-confirm-modal');
+                const titleEl = document.getElementById('modal-title');
+                const messageEl = document.getElementById('modal-message');
+                const confirmBtn = document.getElementById('modal-confirm');
+                const cancelBtn = document.getElementById('modal-cancel');
+
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                gsap.fromTo("#modal-content", {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)"});
+
+                const closeModal = (result) => {
+                    gsap.to("#modal-content", {scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        resolve(result);
+                    }});
+                };
+
+                confirmBtn.onclick = () => closeModal(true);
+                cancelBtn.onclick = () => closeModal(false);
+                modal.onclick = (e) => { if(e.target === modal) closeModal(false); };
+            });
+        }
+
+        // Intercept form submissions for confirmation
+        document.addEventListener('submit', async (e) => {
+            const form = e.target;
+            const confirmMsg = form.getAttribute('data-confirm');
+            if (confirmMsg && !form.dataset.confirmed) {
+                e.preventDefault();
+                const confirmed = await showConfirm(confirmMsg);
+                if (confirmed) {
+                    form.dataset.confirmed = "true";
+                    form.submit();
+                }
+            }
+        });
+    </script>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="custom-confirm-modal" class="fixed inset-0 z-[3000] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-6">
+        <div id="modal-content" class="glass w-full max-w-md p-8 rounded-[2rem] border-white/10 shadow-2xl space-y-8">
+            <div class="space-y-4">
+                <div class="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary">
+                    <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                </div>
+                <h3 id="modal-title" class="text-2xl font-display uppercase tracking-tight">Authorize Action</h3>
+                <p id="modal-message" class="text-text-secondary font-light leading-relaxed">Are you sure you want to proceed with this operation?</p>
+            </div>
+            <div class="flex gap-4 pt-4">
+                <button id="modal-cancel" class="flex-1 btn-premium btn-outline py-4 justify-center text-sm">Cancel</button>
+                <button id="modal-confirm" class="flex-1 btn-premium btn-primary py-4 justify-center text-sm shadow-xl shadow-primary/20">Confirm</button>
+            </div>
+        </div>
+    </div>
     </script>
 </body>
 </html>

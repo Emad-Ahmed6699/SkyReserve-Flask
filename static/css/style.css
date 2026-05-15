@@ -5,44 +5,48 @@
 
 :root {
     /* --- Design Tokens (Modern Neutral Palette) --- */
-    --primary: #aec6ff;
-    --primary-glow: rgba(174, 198, 255, 0.4);
-    --on-primary: #002e6a;
+    --primary: #5c93ff; /* More vibrant blue for dark mode */
+    --primary-glow: rgba(92, 147, 255, 0.3);
+    --on-primary: #001a4d;
     
-    /* Dark Mode Defaults */
-    --bg-base: #0b0f10;
-    --bg-surface: #101415;
-    --bg-surface-high: #1d2022;
-    --bg-surface-elevated: #272a2c;
+    /* Dark Mode Defaults (Deeper & Sharper) */
+    --bg-base: #050708;
+    --bg-surface: #0d1112;
+    --bg-surface-high: #161a1c;
+    --bg-surface-elevated: #1f2326;
     
-    --text-primary: #e0e3e5;
-    --text-secondary: #c1c6d7;
-    --text-dim: #8b90a1;
+    --text-primary: #f0f2f4;
+    --text-secondary: #a8b0c1;
+    --text-dim: #6b7280;
     
-    --border: rgba(65, 71, 85, 0.2);
-    --border-hover: rgba(174, 198, 255, 0.3);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(92, 147, 255, 0.4);
     
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     --radius-xl: 32px;
 
-    --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- Light Mode Overrides --- */
+/* --- Light Mode Overrides (Vibrant & Clean) --- */
 [data-theme="light"] {
-    --bg-base: #f8fafc;
+    --primary: #0052ff; /* Deep, premium blue for light mode */
+    --primary-glow: rgba(0, 82, 255, 0.2);
+    --on-primary: #ffffff;
+    
+    --bg-base: #f1f5f9;
     --bg-surface: #ffffff;
-    --bg-surface-high: #f1f5f9;
-    --bg-surface-elevated: #e2e8f0;
+    --bg-surface-high: #f8fafc;
+    --bg-surface-elevated: #f1f5f9;
     
     --text-primary: #0f172a;
     --text-secondary: #475569;
-    --text-dim: #94a3b8;
+    --text-dim: #64748b;
     
-    --border: rgba(15, 23, 42, 0.12);
-    --border-hover: rgba(0, 119, 255, 0.4);
+    --border: rgba(15, 23, 42, 0.1);
+    --border-hover: rgba(0, 82, 255, 0.3);
 }
 
 /* --- Core Styles --- */
