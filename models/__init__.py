@@ -1,1 +1,1 @@
-from .models import db, User, Flight, Booking, Contact
+from .models import db, User, Flight, Booking
