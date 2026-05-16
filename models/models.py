@@ -21,7 +21,7 @@ class Flight(db.Model):
     arrival_time = db.Column(db.DateTime, nullable=False)
     seats_available = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    bookings = db.relationship('Booking', backref='flight', lazy=True)
+    bookings = db.relationship('Booking', backref='flight', lazy=True, cascade='all, delete-orphan')
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)

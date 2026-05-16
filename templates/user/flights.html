@@ -32,7 +32,17 @@
                 <div class="flex flex-col lg:flex-row h-full">
                     <!-- Image Side -->
                     <div class="w-full lg:w-2/5 h-64 lg:h-auto relative overflow-hidden bg-black">
-                        <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=1000&auto=format&fit=crop" 
+                        {% set aircraft_images = [
+                            'https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=1000&auto=format&fit=crop',
+                            'https://images.unsplash.com/photo-1570710891163-6d3b5c47248b?w=1000&auto=format&fit=crop',
+                            'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1000&auto=format&fit=crop',
+                            'https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=1000&auto=format&fit=crop',
+                            'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=1000&auto=format&fit=crop',
+                            'https://images.unsplash.com/photo-1529074963764-98f45c47344b?w=1000&auto=format&fit=crop',
+                            'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=1000&auto=format&fit=crop'
+                        ] %}
+                        {% set image_index = flight.id % aircraft_images|length %}
+                        <img src="{{ aircraft_images[image_index] }}" 
                              class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-[2000ms]" 
                              alt="Aircraft Visual">
                         <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black via-transparent to-transparent z-10"></div>
